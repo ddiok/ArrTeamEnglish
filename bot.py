@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import mimetypes
 import os
 import re
 import time
@@ -17,6 +18,9 @@ ENV_FILE = BASE_DIR / ".env"
 DEFAULT_PRONUNCIATION_FILE = BASE_DIR / "english-pronunciation.md"
 DEFAULT_TEMPLATE_FILE = BASE_DIR / "message-templates.md"
 DEFAULT_OPENAI_MODEL = "gpt-5-mini"
+DEFAULT_TTS_MODEL = "gpt-4o-mini-tts"
+DEFAULT_TTS_VOICE = "marin"
+DEFAULT_AUDIO_CACHE_DIR = BASE_DIR / "audio-cache"
 
 FIELDS = [
     "word",
@@ -51,8 +55,11 @@ class Config:
     telegram_token: str
     pronunciation_file: Path
     template_file: Path
+    audio_cache_dir: Path
     openai_api_key: str
     openai_model: str
+    tts_model: str
+    tts_voice: str
 
 
 def load_env(path: Path) -> dict[str, str]:
@@ -86,12 +93,20 @@ def get_config() -> Config:
     if not template_file.is_absolute():
         template_file = BASE_DIR / template_file
 
+    audio_cache_name = env.get("AUDIO_CACHE_DIR", str(DEFAULT_AUDIO_CACHE_DIR)).strip()
+    audio_cache_dir = Path(audio_cache_name)
+    if not audio_cache_dir.is_absolute():
+        audio_cache_dir = BASE_DIR / audio_cache_dir
+
     return Config(
         telegram_token=token,
         pronunciation_file=pronunciation_file,
         template_file=template_file,
+        audio_cache_dir=audio_cache_dir,
         openai_api_key=env.get("OPENAI_API_KEY", "").strip(),
         openai_model=env.get("OPENAI_MODEL", DEFAULT_OPENAI_MODEL).strip() or DEFAULT_OPENAI_MODEL,
+        tts_model=env.get("OPENAI_TTS_MODEL", DEFAULT_TTS_MODEL).strip() or DEFAULT_TTS_MODEL,
+        tts_voice=env.get("OPENAI_TTS_VOICE", DEFAULT_TTS_VOICE).strip() or DEFAULT_TTS_VOICE,
     )
 
 
@@ -285,6 +300,58 @@ def openai_json_request(api_key: str, model: str, word: str) -> dict[str, str]:
     return {field: str(values.get(field, "")).strip() for field in FIELDS}
 
 
+def safe_audio_file_name(word: str) -> str:
+    safe_word = re.sub(r"[^A-Za-z0-9_-]+", "_", word).strip("_")
+    return f"{safe_word or 'word'}.mp3"
+
+
+def openai_speech_request(api_key: str, model: str, voice: str, word: str) -> bytes:
+    payload = {
+        "model": model,
+        "voice": voice,
+        "input": word,
+        "instructions": (
+            "Pronounce only this single English word in clear General American English. "
+            "Do not add any other words."
+        ),
+        "response_format": "mp3",
+    }
+    request = urllib.request.Request(
+        "https://api.openai.com/v1/audio/speech",
+        data=json.dumps(payload).encode("utf-8"),
+        headers={
+            "Authorization": f"Bearer {api_key}",
+            "Content-Type": "application/json",
+        },
+        method="POST",
+    )
+
+    try:
+        with urllib.request.urlopen(request, timeout=60) as response:
+            return response.read()
+    except HTTPError as exc:
+        details = exc.read().decode("utf-8", errors="replace")
+        raise RuntimeError(f"OpenAI TTS API error: {exc.code} {details}") from exc
+
+
+def get_or_create_word_audio(config: Config, word: str) -> Path:
+    config.audio_cache_dir.mkdir(parents=True, exist_ok=True)
+    audio_path = config.audio_cache_dir / safe_audio_file_name(word)
+    if audio_path.exists() and audio_path.stat().st_size > 0:
+        return audio_path
+    if not config.openai_api_key:
+        raise RuntimeError("OPENAI_API_KEY пустой, аудио произношение не создано.")
+
+    audio = openai_speech_request(
+        config.openai_api_key,
+        config.tts_model,
+        config.tts_voice,
+        word,
+    )
+    audio_path.write_bytes(audio)
+    return audio_path
+
+
 def create_entry_with_openai(word: str, key: str, api_key: str, model: str) -> Entry:
     values = openai_json_request(api_key, model, word)
     values["word"] = normalize_word(values.get("word") or word)
@@ -379,6 +446,55 @@ class TelegramBot:
             },
         )
 
+    def multipart_request(self, method: str, fields: dict[str, object], files: dict[str, Path]) -> dict:
+        boundary = f"----ArrTeamEnglish{int(time.time() * 1000)}"
+        chunks: list[bytes] = []
+
+        for name, value in fields.items():
+            chunks.append(f"--{boundary}\r\n".encode("utf-8"))
+            chunks.append(f'Content-Disposition: form-data; name="{name}"\r\n\r\n'.encode("utf-8"))
+            chunks.append(str(value).encode("utf-8"))
+            chunks.append(b"\r\n")
+
+        for name, path in files.items():
+            filename = path.name
+            content_type = mimetypes.guess_type(filename)[0] or "application/octet-stream"
+            chunks.append(f"--{boundary}\r\n".encode("utf-8"))
+            chunks.append(
+                (
+                    f'Content-Disposition: form-data; name="{name}"; filename="{filename}"\r\n'
+                    f"Content-Type: {content_type}\r\n\r\n"
+                ).encode("utf-8")
+            )
+            chunks.append(path.read_bytes())
+            chunks.append(b"\r\n")
+
+        chunks.append(f"--{boundary}--\r\n".encode("utf-8"))
+        body = b"".join(chunks)
+        request = urllib.request.Request(
+            f"{self.api_base}/{method}",
+            data=body,
+            headers={"Content-Type": f"multipart/form-data; boundary={boundary}"},
+            method="POST",
+        )
+
+        with urllib.request.urlopen(request, timeout=60) as response:
+            payload = json.loads(response.read().decode("utf-8"))
+        if not payload.get("ok"):
+            description = payload.get("description", "Telegram API request failed")
+            raise RuntimeError(description)
+        return payload
+
+    def send_audio(self, chat_id: int, audio_path: Path, title: str) -> None:
+        self.multipart_request(
+            "sendAudio",
+            {
+                "chat_id": chat_id,
+                "title": title,
+            },
+            {"audio": audio_path},
+        )
+
     def get_updates(self, offset: int | None) -> list[dict]:
         params: dict[str, object] = {"timeout": 50}
         if offset is not None:
@@ -390,7 +506,11 @@ class TelegramBot:
         if word in {"/start", "/help"}:
             self.send_message(
                 chat_id,
-                "Привет! Напиши одно английское слово, а я добавлю его в словарь или покажу уже сохраненную карточку.",
+                (
+                    "Привет! Напиши одно английское слово, а я добавлю его в словарь "
+                    "или покажу уже сохраненную карточку. После карточки пришлю AI-аудио "
+                    "с американским произношением."
+                ),
             )
             return
 
@@ -409,6 +529,12 @@ class TelegramBot:
             print(f"Не удалось заполнить слово через OpenAI ({word}): {exc}")
             entry, _created = upsert_word(self.config.pronunciation_file, word)
         self.send_message(chat_id, render_entry_message(entry, self.config.template_file))
+        try:
+            audio_word = entry.values.get("word", word)
+            audio_path = get_or_create_word_audio(self.config, audio_word)
+            self.send_audio(chat_id, audio_path, audio_word)
+        except Exception as exc:
+            print(f"Не удалось отправить аудио произношение ({word}): {exc}")
 
     def run(self) -> None:
         print("Telegram-бот запущен. Нажмите Ctrl+C, чтобы остановить.")

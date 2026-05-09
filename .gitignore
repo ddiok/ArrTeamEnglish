@@ -1,4 +1,5 @@
 .env
+audio-cache/
 logs/
 __pycache__/
 *.pyc

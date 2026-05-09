@@ -10,6 +10,8 @@ Telegram-бот для заполнения файла `english-pronunciation.md
 TELEGRAM_BOT_TOKEN=1234567890:your_real_token
 OPENAI_API_KEY=sk-proj-your_real_openai_key
 OPENAI_MODEL=gpt-5-mini
+OPENAI_TTS_MODEL=gpt-4o-mini-tts
+OPENAI_TTS_VOICE=marin
 MESSAGE_TEMPLATE_FILE=message-templates.md
 ```
 
@@ -42,6 +44,7 @@ cd C:\Users\WORK\Documents\Codex\ArrTeamEnglish
 
 - Если слово уже есть в `english-pronunciation.md`, бот отправит все сохраненные значения одним сообщением: одно значение на строку, без названий полей.
 - Если слова еще нет, бот попросит OpenAI заполнить произношение, перевод, ударение, множественное число и частые фразы, затем сохранит новую запись `wordN` и отправит карточку.
+- После текстовой карточки бот отправит MP3-аудио с американским произношением слова. Аудио генерируется OpenAI TTS, голос `marin`, название аудио равно значению поля `word`.
 - Формат карточки хранится в `message-templates.md`, шаблон `word_card`.
 
 Если `OPENAI_API_KEY` отсутствует или запрос к OpenAI не сработает, бот создаст локальную заготовку с полями `TODO`.

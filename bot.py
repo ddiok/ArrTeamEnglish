@@ -339,11 +339,15 @@ def format_entry(entry: Entry, template: str | None = None) -> str:
     return template.format_map({field: entry.values.get(field, "") for field in FIELDS})
 
 
+def render_entry_message(entry: Entry, template_file: Path = DEFAULT_TEMPLATE_FILE) -> str:
+    templates = load_templates(template_file)
+    return format_entry(entry, templates.get("word_card"))
+
+
 class TelegramBot:
     def __init__(self, config: Config) -> None:
         self.api_base = f"https://api.telegram.org/bot{config.telegram_token}"
         self.config = config
-        self.templates = load_templates(config.template_file)
 
     def request(self, method: str, params: dict[str, object] | None = None) -> dict:
         data = None
@@ -398,7 +402,7 @@ class TelegramBot:
         except Exception as exc:
             print(f"Не удалось заполнить слово через OpenAI ({word}): {exc}")
             entry, _created = upsert_word(self.config.pronunciation_file, word)
-        self.send_message(chat_id, format_entry(entry, self.templates.get("word_card")))
+        self.send_message(chat_id, render_entry_message(entry, self.config.template_file))
 
     def run(self) -> None:
         print("Telegram-бот запущен. Нажмите Ctrl+C, чтобы остановить.")

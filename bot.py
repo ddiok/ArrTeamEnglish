@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import html
 import json
 import mimetypes
 import os
@@ -409,7 +410,8 @@ def upsert_word(
 def format_entry(entry: Entry, template: str | None = None) -> str:
     if not template:
         return "\n".join(entry.values.get(field, "") for field in FIELDS)
-    return template.format_map({field: entry.values.get(field, "") for field in FIELDS})
+    values = {field: html.escape(entry.values.get(field, ""), quote=False) for field in FIELDS}
+    return template.format_map(values)
 
 
 def render_entry_message(entry: Entry, template_file: Path = DEFAULT_TEMPLATE_FILE) -> str:
@@ -436,15 +438,15 @@ class TelegramBot:
 
         return payload
 
-    def send_message(self, chat_id: int, text: str) -> None:
-        self.request(
-            "sendMessage",
-            {
-                "chat_id": chat_id,
-                "text": text,
-                "disable_web_page_preview": "true",
-            },
-        )
+    def send_message(self, chat_id: int, text: str, parse_mode: str | None = None) -> None:
+        params: dict[str, object] = {
+            "chat_id": chat_id,
+            "text": text,
+            "disable_web_page_preview": "true",
+        }
+        if parse_mode:
+            params["parse_mode"] = parse_mode
+        self.request("sendMessage", params)
 
     def multipart_request(self, method: str, fields: dict[str, object], files: dict[str, Path]) -> dict:
         boundary = f"----ArrTeamEnglish{int(time.time() * 1000)}"
@@ -528,7 +530,7 @@ class TelegramBot:
         except Exception as exc:
             print(f"Не удалось заполнить слово через OpenAI ({word}): {exc}")
             entry, _created = upsert_word(self.config.pronunciation_file, word)
-        self.send_message(chat_id, render_entry_message(entry, self.config.template_file))
+        self.send_message(chat_id, render_entry_message(entry, self.config.template_file), parse_mode="HTML")
         try:
             audio_word = entry.values.get("word", word)
             audio_path = get_or_create_word_audio(self.config, audio_word)

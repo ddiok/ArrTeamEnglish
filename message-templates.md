@@ -2,16 +2,17 @@
 
 ```yaml
 word_card: |
-  {word}
-  UK: {pron_uk}   US: {pron_us}
-  удар.: {stress}
+  <b>{word}</b>
+  <i>UK: {pron_uk}    US: {pron_us}</i>
+  <b>ударение:</b> {stress}
 
-  {many}
-  UK: {pron_uk_many}   US: {pron_us_many}
-  удар.: {stress_many}
+  <b>{many}</b>
+  <i>UK: {pron_uk_many}    US: {pron_us_many}</i>
+  <b>ударение:</b> {stress_many}
 
-  {used_phrase}
+  <b>Сочетания:</b>
+  <i>{used_phrase}</i>
 
-  RU: {ru}
-  варианты: {ru_other}
+  <b>RU:</b> {ru}
+  <i>варианты:</i> {ru_other}
 ```

@@ -45,3 +45,9 @@ cd C:\Users\WORK\Documents\Codex\ArrTeamEnglish
 - Формат карточки хранится в `message-templates.md`, шаблон `word_card`.
 
 Если `OPENAI_API_KEY` отсутствует или запрос к OpenAI не сработает, бот создаст локальную заготовку с полями `TODO`.
+
+Проверить применение шаблона к слову можно так:
+
+```powershell
+python render_message.py access
+```

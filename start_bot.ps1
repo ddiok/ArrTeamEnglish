@@ -11,5 +11,16 @@ if (-not (Test-Path -LiteralPath $LogDir)) {
 }
 
 Set-Location -LiteralPath $ProjectDir
+$env:PYTHONIOENCODING = "utf-8"
 
-& $PythonExe (Join-Path $ProjectDir "bot.py") 1>> $StdOutLog 2>> $StdErrLog
+$Process = Start-Process `
+    -FilePath $PythonExe `
+    -ArgumentList @((Join-Path $ProjectDir "bot.py")) `
+    -WorkingDirectory $ProjectDir `
+    -RedirectStandardOutput $StdOutLog `
+    -RedirectStandardError $StdErrLog `
+    -WindowStyle Hidden `
+    -PassThru
+
+$Process.WaitForExit()
+exit $Process.ExitCode

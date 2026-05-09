@@ -9,6 +9,7 @@ import urllib.request
 from urllib.error import HTTPError
 from dataclasses import dataclass
 from pathlib import Path
+import sys
 
 
 BASE_DIR = Path(__file__).resolve().parent
@@ -32,6 +33,11 @@ FIELDS = [
 ]
 
 WORD_RE = re.compile(r"^[A-Za-z][A-Za-z'-]*$")
+
+if hasattr(sys.stdout, "reconfigure"):
+    sys.stdout.reconfigure(encoding="utf-8")
+if hasattr(sys.stderr, "reconfigure"):
+    sys.stderr.reconfigure(encoding="utf-8")
 
 
 @dataclass

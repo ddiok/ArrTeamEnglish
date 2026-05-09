@@ -14,6 +14,7 @@ from pathlib import Path
 BASE_DIR = Path(__file__).resolve().parent
 ENV_FILE = BASE_DIR / ".env"
 DEFAULT_PRONUNCIATION_FILE = BASE_DIR / "english-pronunciation.md"
+DEFAULT_TEMPLATE_FILE = BASE_DIR / "message-templates.md"
 DEFAULT_OPENAI_MODEL = "gpt-5-mini"
 
 FIELDS = [
@@ -43,6 +44,7 @@ class Entry:
 class Config:
     telegram_token: str
     pronunciation_file: Path
+    template_file: Path
     openai_api_key: str
     openai_model: str
 
@@ -73,9 +75,15 @@ def get_config() -> Config:
     if not pronunciation_file.is_absolute():
         pronunciation_file = BASE_DIR / pronunciation_file
 
+    template_file_name = env.get("MESSAGE_TEMPLATE_FILE", str(DEFAULT_TEMPLATE_FILE)).strip()
+    template_file = Path(template_file_name)
+    if not template_file.is_absolute():
+        template_file = BASE_DIR / template_file
+
     return Config(
         telegram_token=token,
         pronunciation_file=pronunciation_file,
+        template_file=template_file,
         openai_api_key=env.get("OPENAI_API_KEY", "").strip(),
         openai_model=env.get("OPENAI_MODEL", DEFAULT_OPENAI_MODEL).strip() or DEFAULT_OPENAI_MODEL,
     )
@@ -107,6 +115,44 @@ def parse_entries(markdown: str) -> list[Entry]:
             current.values[field_match.group(1)] = field_match.group(2).strip()
 
     return entries
+
+
+def parse_templates(markdown: str) -> dict[str, str]:
+    block = extract_yaml_block(markdown)
+    templates: dict[str, str] = {}
+    lines = block.splitlines()
+    index = 0
+
+    while index < len(lines):
+        line = lines[index].rstrip()
+        match = re.match(r"^([a-z_]+):\s*\|\s*$", line)
+        if not match:
+            index += 1
+            continue
+
+        template_name = match.group(1)
+        index += 1
+        value_lines: list[str] = []
+        while index < len(lines):
+            value_line = lines[index].rstrip()
+            if re.match(r"^[a-z_]+:\s*\|\s*$", value_line):
+                break
+            if value_line.startswith("  "):
+                value_lines.append(value_line[2:])
+            elif not value_line:
+                value_lines.append("")
+            else:
+                break
+            index += 1
+        templates[template_name] = "\n".join(value_lines).strip("\n")
+
+    return templates
+
+
+def load_templates(path: Path) -> dict[str, str]:
+    if not path.exists():
+        return {}
+    return parse_templates(path.read_text(encoding="utf-8"))
 
 
 def render_markdown(entries: list[Entry]) -> str:
@@ -287,14 +333,17 @@ def upsert_word(
     return entry, True
 
 
-def format_entry(entry: Entry) -> str:
-    return "\n".join(entry.values.get(field, "") for field in FIELDS)
+def format_entry(entry: Entry, template: str | None = None) -> str:
+    if not template:
+        return "\n".join(entry.values.get(field, "") for field in FIELDS)
+    return template.format_map({field: entry.values.get(field, "") for field in FIELDS})
 
 
 class TelegramBot:
     def __init__(self, config: Config) -> None:
         self.api_base = f"https://api.telegram.org/bot{config.telegram_token}"
         self.config = config
+        self.templates = load_templates(config.template_file)
 
     def request(self, method: str, params: dict[str, object] | None = None) -> dict:
         data = None
@@ -349,7 +398,7 @@ class TelegramBot:
         except Exception as exc:
             print(f"Не удалось заполнить слово через OpenAI ({word}): {exc}")
             entry, _created = upsert_word(self.config.pronunciation_file, word)
-        self.send_message(chat_id, format_entry(entry))
+        self.send_message(chat_id, format_entry(entry, self.templates.get("word_card")))
 
     def run(self) -> None:
         print("Telegram-бот запущен. Нажмите Ctrl+C, чтобы остановить.")

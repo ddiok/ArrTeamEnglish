@@ -5,7 +5,7 @@ $ProjectDir = Split-Path -Parent $MyInvocation.MyCommand.Path
 $StartScript = Join-Path $ProjectDir "start_bot.ps1"
 
 if (-not (Test-Path -LiteralPath $StartScript)) {
-    throw "Cannot find start script: $StartScript"
+    throw "Не найден стартовый скрипт: $StartScript"
 }
 
 $Action = New-ScheduledTaskAction `
@@ -27,7 +27,7 @@ Register-ScheduledTask `
     -Action $Action `
     -Trigger $Trigger `
     -Settings $Settings `
-    -Description "Runs ArrTeamEnglish Telegram pronunciation bot at Windows logon." `
+    -Description "Запускает Telegram-бот ArrTeamEnglish при входе в Windows." `
     -Force | Out-Null
 
 Start-ScheduledTask -TaskName $TaskName

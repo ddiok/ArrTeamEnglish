@@ -66,7 +66,7 @@ def get_config() -> Config:
     env = {**load_env(ENV_FILE), **os.environ}
     token = env.get("TELEGRAM_BOT_TOKEN", "").strip()
     if not token:
-        raise RuntimeError("TELEGRAM_BOT_TOKEN is empty. Add BotFather token to .env.")
+        raise RuntimeError("TELEGRAM_BOT_TOKEN пустой. Добавьте токен BotFather в .env.")
 
     file_name = env.get("PRONUNCIATION_FILE", str(DEFAULT_PRONUNCIATION_FILE)).strip()
     pronunciation_file = Path(file_name)
@@ -329,11 +329,14 @@ class TelegramBot:
     def handle_text(self, chat_id: int, text: str) -> None:
         word = normalize_word(text)
         if word in {"/start", "/help"}:
-            self.send_message(chat_id, "Send one English word. I will add it or show the saved entry.")
+            self.send_message(
+                chat_id,
+                "Привет! Напиши одно английское слово, а я добавлю его в словарь или покажу уже сохраненную карточку.",
+            )
             return
 
         if not WORD_RE.match(word):
-            self.send_message(chat_id, "Send one English word without spaces.")
+            self.send_message(chat_id, "Пришли одно английское слово без пробелов.")
             return
 
         try:
@@ -344,12 +347,12 @@ class TelegramBot:
                 self.config.openai_model,
             )
         except Exception as exc:
-            print(f"OpenAI fill failed for {word}: {exc}")
+            print(f"Не удалось заполнить слово через OpenAI ({word}): {exc}")
             entry, _created = upsert_word(self.config.pronunciation_file, word)
         self.send_message(chat_id, format_entry(entry))
 
     def run(self) -> None:
-        print("Telegram pronunciation bot is running. Press Ctrl+C to stop.")
+        print("Telegram-бот запущен. Нажмите Ctrl+C, чтобы остановить.")
         offset: int | None = None
 
         while True:
@@ -363,10 +366,10 @@ class TelegramBot:
                     if isinstance(chat_id, int) and isinstance(text, str):
                         self.handle_text(chat_id, text)
             except KeyboardInterrupt:
-                print("Stopped.")
+                print("Остановлено.")
                 return
             except Exception as exc:
-                print(f"Error: {exc}")
+                print(f"Ошибка: {exc}")
                 time.sleep(5)
 
 

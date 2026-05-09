@@ -1,10 +1,10 @@
 # ArrTeamEnglish
 
-Telegram bot for filling `english-pronunciation.md`.
+Telegram-бот для заполнения файла `english-pronunciation.md`.
 
-## Setup
+## Настройка
 
-1. Add the BotFather token to `.env`:
+1. Добавьте токен BotFather и ключ OpenAI в `.env`:
 
 ```env
 TELEGRAM_BOT_TOKEN=1234567890:your_real_token
@@ -12,34 +12,34 @@ OPENAI_API_KEY=sk-proj-your_real_openai_key
 OPENAI_MODEL=gpt-5-mini
 ```
 
-2. Run the bot:
+2. Запустите бота:
 
 ```powershell
 python bot.py
 ```
 
-## Windows Autostart
+## Автозапуск Windows
 
-Run PowerShell as administrator, then execute:
+Запустите PowerShell от имени администратора, затем выполните:
 
 ```powershell
 cd C:\Users\WORK\Documents\Codex\ArrTeamEnglish
 .\install_task_scheduler.ps1
 ```
 
-The task name is `ArrTeamEnglishBot`. It starts the bot at Windows logon and writes logs to `logs/`.
+Задача называется `ArrTeamEnglishBot`. Она запускает бота при входе в Windows и пишет логи в `logs/`.
 
-To remove the scheduled task:
+Чтобы удалить задачу:
 
 ```powershell
 .\uninstall_task_scheduler.ps1
 ```
 
-## Behavior
+## Поведение
 
-Send one English word to the bot.
+Отправьте боту одно английское слово.
 
-- If the word already exists in `english-pronunciation.md`, the bot sends all saved values as one message, one value per line, without field names.
-- If the word does not exist, the bot asks OpenAI to fill pronunciation, translation, stress, plural, and common phrases, then saves a new `wordN` entry and sends the values.
+- Если слово уже есть в `english-pronunciation.md`, бот отправит все сохраненные значения одним сообщением: одно значение на строку, без названий полей.
+- Если слова еще нет, бот попросит OpenAI заполнить произношение, перевод, ударение, множественное число и частые фразы, затем сохранит новую запись `wordN` и отправит значения.
 
-If `OPENAI_API_KEY` is missing or the OpenAI request fails, the bot falls back to a local placeholder entry with `TODO` fields.
+Если `OPENAI_API_KEY` отсутствует или запрос к OpenAI не сработает, бот создаст локальную заготовку с полями `TODO`.

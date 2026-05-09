@@ -45,6 +45,7 @@ cd C:\Users\WORK\Documents\Codex\ArrTeamEnglish
 - Если слово уже есть в `english-pronunciation.md`, бот отправит все сохраненные значения одним сообщением: одно значение на строку, без названий полей.
 - Если слова еще нет, бот попросит OpenAI заполнить произношение, перевод, ударение, множественное число и частые фразы, затем сохранит новую запись `wordN` и отправит карточку.
 - После текстовой карточки бот отправит MP3-аудио с американским произношением слова. Аудио генерируется OpenAI TTS, голос `marin`, название аудио равно значению поля `word`.
+- Локальный путь к MP3 хранится в поле `link` внутри `english-pronunciation.md`.
 - Формат карточки хранится в `message-templates.md`, шаблон `word_card`.
 
 Если `OPENAI_API_KEY` отсутствует или запрос к OpenAI не сработает, бот создаст локальную заготовку с полями `TODO`.
@@ -53,4 +54,10 @@ cd C:\Users\WORK\Documents\Codex\ArrTeamEnglish
 
 ```powershell
 python render_message.py access
+```
+
+Проставить или обновить `link` для всех слов:
+
+```powershell
+python sync_audio_links.py
 ```

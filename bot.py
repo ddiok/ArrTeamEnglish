@@ -35,6 +35,7 @@ FIELDS = [
     "ru",
     "ru_other",
     "used_phrase",
+    "link",
 ]
 
 WORD_RE = re.compile(r"^[A-Za-z][A-Za-z'-]*$")
@@ -224,6 +225,7 @@ def create_entry(word: str, key: str) -> Entry:
             "ru": "TODO",
             "ru_other": "TODO",
             "used_phrase": "TODO",
+            "link": "",
         },
     )
 
@@ -353,6 +355,13 @@ def get_or_create_word_audio(config: Config, word: str) -> Path:
     return audio_path
 
 
+def audio_link(config: Config, audio_path: Path) -> str:
+    try:
+        return audio_path.resolve().relative_to(BASE_DIR).as_posix()
+    except ValueError:
+        return str(audio_path.resolve())
+
+
 def create_entry_with_openai(word: str, key: str, api_key: str, model: str) -> Entry:
     values = openai_json_request(api_key, model, word)
     values["word"] = normalize_word(values.get("word") or word)
@@ -405,6 +414,23 @@ def upsert_word(
     entries.append(entry)
     path.write_text(render_markdown(entries), encoding="utf-8")
     return entry, True
+
+
+def save_entries(path: Path, entries: list[Entry]) -> None:
+    path.write_text(render_markdown(entries), encoding="utf-8")
+
+
+def save_entry_link(path: Path, entry: Entry, link: str) -> None:
+    entries = load_or_create_entries(path)
+    target_word = entry.values.get("word", "")
+    target = find_entry(entries, target_word)
+    if target is None:
+        entry.values["link"] = link
+        entries.append(entry)
+    else:
+        target.values["link"] = link
+        entry.values["link"] = link
+    save_entries(path, entries)
 
 
 def format_entry(entry: Entry, template: str | None = None) -> str:
@@ -534,6 +560,8 @@ class TelegramBot:
         try:
             audio_word = entry.values.get("word", word)
             audio_path = get_or_create_word_audio(self.config, audio_word)
+            if not entry.values.get("link"):
+                save_entry_link(self.config.pronunciation_file, entry, audio_link(self.config, audio_path))
             self.send_audio(chat_id, audio_path, audio_word)
         except Exception as exc:
             print(f"Не удалось отправить аудио произношение ({word}): {exc}")

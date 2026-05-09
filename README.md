@@ -18,6 +18,23 @@ OPENAI_MODEL=gpt-5-mini
 python bot.py
 ```
 
+## Windows Autostart
+
+Run PowerShell as administrator, then execute:
+
+```powershell
+cd C:\Users\WORK\Documents\Codex\ArrTeamEnglish
+.\install_task_scheduler.ps1
+```
+
+The task name is `ArrTeamEnglishBot`. It starts the bot at Windows logon and writes logs to `logs/`.
+
+To remove the scheduled task:
+
+```powershell
+.\uninstall_task_scheduler.ps1
+```
+
 ## Behavior
 
 Send one English word to the bot.

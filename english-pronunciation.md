@@ -5,14 +5,14 @@ word1:
   word: menu
   many: menus
   pron_uk: /ˈmen.juː/
-  pron_uk_ru: /МЕН-ю/
+  pron_uk_ru: /МЭН-юː/
   pron_us: /ˈmen.juː/, /ˈmen.uː/
-  pron_us_ru: /МЕН-ю/, /МЕН-у/
+  pron_us_ru: /МЭН-юː/, /МЭН-уː/
   stress: MEN-u
   pron_uk_many: /ˈmen.juːz/
-  pron_uk_many_ru: /МЕН-юз/
+  pron_uk_many_ru: /МЭН-юːз/
   pron_us_many: /ˈmen.juːz/, /ˈmen.uːz/
-  pron_us_many_ru: /МЕН-юз/, /МЕН-уз/
+  pron_us_many_ru: /МЭН-юːз/, /МЭН-уːз/
   stress_many: MEN-us
   ru: меню
   ru_other: список, перечень
@@ -22,14 +22,14 @@ word2:
   word: access
   many: accesses
   pron_uk: /ˈæk.ses/
-  pron_uk_ru: /ЭК-сес/
+  pron_uk_ru: /ЭК-сэс/
   pron_us: /ˈæk.ses/
-  pron_us_ru: /ЭК-сес/
+  pron_us_ru: /ЭК-сэс/
   stress: AC-cess
   pron_uk_many: /ˈæk.sesɪz/
-  pron_uk_many_ru: /ЭК-сес-из/
+  pron_uk_many_ru: /ЭК-сэс-из/
   pron_us_many: /ˈæk.sesɪz/
-  pron_us_many_ru: /ЭК-сес-из/
+  pron_us_many_ru: /ЭК-сэс-из/
   stress_many: AC-cess-es
   ru: доступ
   ru_other: вход, подход, подключение, обращение
@@ -56,12 +56,12 @@ word4:
   word: task
   many: tasks
   pron_uk: /tɑːsk/
-  pron_uk_ru: /ТААСК/
+  pron_uk_ru: /ТАСК/
   pron_us: /tæsk/
   pron_us_ru: /ТЭСК/
   stress: TASK
   pron_uk_many: /tɑːsks/
-  pron_uk_many_ru: /ТААСКС/
+  pron_uk_many_ru: /ТАСКС/
   pron_us_many: /tæsks/
   pron_us_many_ru: /ТЭСКС/
   stress_many: TASKS
@@ -107,14 +107,14 @@ word7:
   word: enhance
   many: enhancements
   pron_uk: /ɪnˈhɑːnsmənt/
-  pron_uk_ru: /ин-ХААНС/
+  pron_uk_ru: /ин-ХААНС-мэнт/
   pron_us: /ɪnˈhænsmənt/
-  pron_us_ru: /ин-ХЭНС/
+  pron_us_ru: /ин-ХЭНС-мэнт/
   stress: en-HANCE-ment
   pron_uk_many: /ɪnˈhɑːnsmənts/
-  pron_uk_many_ru: /ин-ХААНСмэнтс/
+  pron_uk_many_ru: /ин-ХААНС-мэнтс/
   pron_us_many: /ɪnˈhænsmənts/
-  pron_us_many_ru: /ин-ХЭНСмэнтс/
+  pron_us_many_ru: /ин-ХЭНС-мэнтс/
   stress_many: en-HANCE-ments
   ru: улучшение
   ru_other: усиление, повышение, увеличение
@@ -124,14 +124,14 @@ word8:
   word: explicitly
   many: explicitly
   pron_uk: /ɪkˈsplɪsɪtli/
-  pron_uk_ru: /икСПЛИситли/
+  pron_uk_ru: /икСПЛИСитли/
   pron_us: /ɪkˈsplɪsɪtli/
-  pron_us_ru: /икСПЛИситли/
+  pron_us_ru: /икСПЛИСитли/
   stress: ex-PLIC-it-ly
   pron_uk_many: /ɪkˈsplɪsɪtli/
-  pron_uk_many_ru: /икСПЛИситли/
+  pron_uk_many_ru: /икСПЛИСитли/
   pron_us_many: /ɪkˈsplɪsɪtli/
-  pron_us_many_ru: /икСПЛИситли/
+  pron_us_many_ru: /икСПЛИСитли/
   stress_many: ex-PLIC-it-ly
   ru: явно
   ru_other: прямо, ясно, конкретно, открыто
@@ -192,14 +192,14 @@ word12:
   word: chairman
   many: chairmen
   pron_uk: /ˈtʃeəmən/
-  pron_uk_ru: /ЧЭА-мэн/
+  pron_uk_ru: /ЧЕАмэн/
   pron_us: /ˈtʃermən/
-  pron_us_ru: /ЧЕР-мэн/
+  pron_us_ru: /ЧЕРмэн/
   stress: CHAIR-man
   pron_uk_many: /ˈtʃeəmənz/
-  pron_uk_many_ru: /ЧЭА-мэнз/
+  pron_uk_many_ru: /ЧЕАмэнз/
   pron_us_many: /ˈtʃermənz/
-  pron_us_many_ru: /ЧЕР-мэнз/
+  pron_us_many_ru: /ЧЕРмэнз/
   stress_many: CHAIR-men
   ru: председатель
   ru_other: глава, председатель правления
@@ -209,17 +209,34 @@ word13:
   word: golden
   many: goldens
   pron_uk: /ˈɡəʊldən/
-  pron_uk_ru: /ГОЛдэн/
+  pron_uk_ru: /ГОУЛДэн/
   pron_us: /ˈɡoʊldən/
-  pron_us_ru: /ГОЛдэн/
+  pron_us_ru: /ГОУЛДэн/
   stress: GOL-den
   pron_uk_many: /ˈɡəʊldənz/
-  pron_uk_many_ru: /ГОЛдэнз/
+  pron_uk_many_ru: /ГОУЛДэнз/
   pron_us_many: /ˈɡoʊldənz/
-  pron_us_many_ru: /ГОЛдэнз/
+  pron_us_many_ru: /ГОУЛДэнз/
   stress_many: GOL-dens
   ru: голден
   ru_other: голден-ретривер, золотой
   used_phrase: golden opportunity, golden rule, golden years
   link: audio-cache/golden.mp3
+word14:
+  word: neuronet
+  many: neuronets
+  pron_uk: /ˈnjʊə.rəʊnɛt/
+  pron_uk_ru: /НЬЮ-роу-нет/
+  pron_us: /ˈnʊroʊnɛt/
+  pron_us_ru: /НУ-роу-нет/
+  stress: NEU-ro-net
+  pron_uk_many: /ˈnjʊə.rəʊnɛts/
+  pron_uk_many_ru: /НЬЮ-роу-нетс/
+  pron_us_many: /ˈnʊroʊnɛts/
+  pron_us_many_ru: /НУ-роу-нетс/
+  stress_many: NEU-ro-nets
+  ru: нейросеть
+  ru_other: нейронная сеть, искусственная нейронная сеть
+  used_phrase: train a neuronet, neuronet architecture, deep neuronet
+  link: https://en.wikipedia.org/wiki/Artificial_neural_network
 ```

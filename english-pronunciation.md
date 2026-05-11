@@ -256,4 +256,106 @@ word15:
   ru_other: требования, необходимость, нужда
   used_phrase: requires attention, requires approval, requires careful consideration
   link: audio-cache/requires.mp3
+word16:
+  word: solvers
+  many: solvers
+  pron_uk: /ˈsɒlvə/
+  pron_uk_ru: /СОЛ-вэ/
+  pron_us: /ˈsɑlvər/
+  pron_us_ru: /САЛ-вер/
+  stress: SOL-ver
+  pron_uk_many: /ˈsɒlvəz/
+  pron_uk_many_ru: /СОЛ-вэз/
+  pron_us_many: /ˈsɑlvərz/
+  pron_us_many_ru: /САЛ-верз/
+  stress_many: SOL-vers
+  ru: решатель
+  ru_other: разгадыватель, программа-решатель
+  used_phrase: problem solvers, puzzle solvers, equation solvers
+  link: audio-cache/solvers.mp3
+word17:
+  word: window
+  many: windows
+  pron_uk: /ˈwɪndəʊ/
+  pron_uk_ru: /ВИН-доу/
+  pron_us: /ˈwɪndoʊ/
+  pron_us_ru: /ВИН-доу/
+  stress: WIN-dow
+  pron_uk_many: /ˈwɪndəʊz/
+  pron_uk_many_ru: /ВИН-доуз/
+  pron_us_many: /ˈwɪndoʊz/
+  pron_us_many_ru: /ВИН-доуз/
+  stress_many: WIN-dows
+  ru: окно
+  ru_other: форточка, витрина
+  used_phrase: window pane, window seat, window of opportunity
+  link: audio-cache/window.mp3
+word18:
+  word: solver
+  many: solvers
+  pron_uk: /ˈsɒlvə/
+  pron_uk_ru: /СОЛ-вэ/
+  pron_us: /ˈsɑlvər/
+  pron_us_ru: /САЛ-вэр/
+  stress: SOL-ver
+  pron_uk_many: /ˈsɒlvəz/
+  pron_uk_many_ru: /СОЛ-вэз/
+  pron_us_many: /ˈsɑlvərz/
+  pron_us_many_ru: /САЛ-вэрз/
+  stress_many: SOL-vers
+  ru: решатель
+  ru_other: программа для решения, алгоритм, тот кто решает
+  used_phrase: problem solver, puzzle solver, SAT solver
+  link: audio-cache/solver.mp3
+word19:
+  word: hello
+  many: hellos
+  pron_uk: /həˈləʊ/
+  pron_uk_ru: /хэ-ЛОУ/
+  pron_us: /həˈloʊ/
+  pron_us_ru: /хэ-ЛОУ/
+  stress: hel-LO
+  pron_uk_many: /həˈləʊz/
+  pron_uk_many_ru: /хэ-ЛОУЗ/
+  pron_us_many: /həˈloʊz/
+  pron_us_many_ru: /хэ-ЛОУЗ/
+  stress_many: hel-LO
+  ru: привет
+  ru_other: алло, приветствие, здравствуйте
+  used_phrase: say hello, hello there, hello again
+  link: audio-cache/hello.mp3
+word20:
+  word: create
+  many: create
+  pron_uk: /kriˈeɪt/
+  pron_uk_ru: /кри-ЭЙТ/
+  pron_us: /kriˈeɪt/
+  pron_us_ru: /кри-ЭЙТ/
+  stress: cre-ATE
+  pron_uk_many: /kriˈeɪt/
+  pron_uk_many_ru: /кри-ЭЙТ/
+  pron_us_many: /kriˈeɪt/
+  pron_us_many_ru: /кри-ЭЙТ/
+  stress_many: cre-ATE
+  ru: создание
+  ru_other: творение, продукт
+  used_phrase: create an account, create a backup, create a file
+  link: audio-cache/create.mp3
+word21:
+  word: limit
+  many: limits
+  pron_uk: /ˈlɪmɪt/
+  pron_uk_ru: /ЛИ-мит/
+  pron_us: /ˈlɪmɪt/
+  pron_us_ru: /ЛИ-мит/
+  stress: LIM-it
+  pron_uk_many: /ˈlɪmɪts/
+  pron_uk_many_ru: /ЛИ-митс/
+  pron_us_many: /ˈlɪmɪts/
+  pron_us_many_ru: /ЛИ-митс/
+  stress_many: LIM-its
+  ru: предел
+  ru_other: ограничение, граница, лимит
+  used_phrase: set limits, push the limits, speed limit
+  link: audio-cache/limit.mp3
 ```

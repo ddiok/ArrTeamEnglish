@@ -239,4 +239,21 @@ word14:
   ru_other: нейронная сеть, искусственная нейронная сеть
   used_phrase: train a neuronet, neuronet architecture, deep neuronet
   link: https://en.wikipedia.org/wiki/Artificial_neural_network
+word15:
+  word: requires
+  many: requires
+  pron_uk: /rɪˈkwaɪəz/
+  pron_uk_ru: /ри-КУАЙ-эз/
+  pron_us: /rɪˈkwaɪərz/
+  pron_us_ru: /ри-КУАЙ-эрз/
+  stress: re-QUI-res
+  pron_uk_many: /rɪˈkwaɪəz/
+  pron_uk_many_ru: /ри-КУАЙ-эз/
+  pron_us_many: /rɪˈkwaɪərz/
+  pron_us_many_ru: /ри-КУАЙ-эрз/
+  stress_many: re-QUI-res
+  ru: требование
+  ru_other: требования, необходимость, нужда
+  used_phrase: requires attention, requires approval, requires careful consideration
+  link: audio-cache/requires.mp3
 ```

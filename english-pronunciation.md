@@ -358,4 +358,55 @@ word21:
   ru_other: ограничение, граница, лимит
   used_phrase: set limits, push the limits, speed limit
   link: audio-cache/limit.mp3
+word22:
+  word: employee
+  many: employees
+  pron_uk: /ˌɛm.plɔɪˈiː/
+  pron_uk_ru: /эм-плой-И/
+  pron_us: /ˌɛm.plɔɪˈiː/
+  pron_us_ru: /эм-плой-И/
+  stress: em-ploy-EE
+  pron_uk_many: /ˌɛm.plɔɪˈiːz/
+  pron_uk_many_ru: /эм-плой-ИЗ/
+  pron_us_many: /ˌɛm.plɔɪˈiːz/
+  pron_us_many_ru: /эм-плой-ИЗ/
+  stress_many: em-ploy-EES
+  ru: сотрудник
+  ru_other: работник, служащий
+  used_phrase: employee benefits, full-time employee, former employee
+  link: audio-cache/employee.mp3
+word23:
+  word: submit
+  many: submits
+  pron_uk: /səbˈmɪt/
+  pron_uk_ru: /сэбМИТ/
+  pron_us: /səbˈmɪt/
+  pron_us_ru: /сэбМИТ/
+  stress: sub-MIT
+  pron_uk_many: /səbˈmɪts/
+  pron_uk_many_ru: /сэбМИТС/
+  pron_us_many: /səbˈmɪts/
+  pron_us_many_ru: /сэбМИТС/
+  stress_many: sub-MITS
+  ru: отправка
+  ru_other: подача, представление, заявление
+  used_phrase: submit an application, submit a form, submit a proposal
+  link: audio-cache/submit.mp3
+word24:
+  word: source-of-truth
+  many: sources-of-truth
+  pron_uk: /ˈsɔːs əv ˈtruːθ/
+  pron_uk_ru: /СООРС ов трууф/
+  pron_us: /ˈsɔrs əv ˈtruθ/
+  pron_us_ru: /СОРС ов труф/
+  stress: SOURCE-of-truth
+  pron_uk_many: /ˈsɔːsɪz əv ˈtruːθ/
+  pron_uk_many_ru: /СООРСиз ов трууф/
+  pron_us_many: /ˈsɔrsɪz əv ˈtruθ/
+  pron_us_many_ru: /СОРСиз ов труф/
+  stress_many: SOUR-ces-of-truth
+  ru: источник истины
+  ru_other: источник данных, авторитетный источник, эталон
+  used_phrase: single source of truth, authoritative source of truth, source of truth for data
+  link: audio-cache/source-of-truth.mp3
 ```

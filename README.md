@@ -46,6 +46,7 @@ cd C:\Users\WORK\Documents\Codex\ArrTeamEnglish
 - Если слова еще нет, бот попросит OpenAI заполнить произношение, перевод, ударение, множественное число и частые фразы, затем сохранит новую запись `wordN` и отправит карточку.
 - После текстовой карточки бот отправит MP3-аудио с американским произношением слова. Аудио генерируется OpenAI TTS, голос `marin`, название аудио равно значению поля `word`.
 - Локальный путь к MP3 хранится в поле `link` внутри `english-pronunciation.md`.
+- После IPA бот показывает приближенное произношение русскими буквами: `pron_uk_ru`, `pron_us_ru`, `pron_uk_many_ru`, `pron_us_many_ru`.
 - Формат карточки хранится в `message-templates.md`, шаблон `word_card`.
 
 Если `OPENAI_API_KEY` отсутствует или запрос к OpenAI не сработает, бот создаст локальную заготовку с полями `TODO`.
@@ -60,4 +61,10 @@ python render_message.py access
 
 ```powershell
 python sync_audio_links.py
+```
+
+Проставить русскобуквенное произношение для всех слов:
+
+```powershell
+python sync_cyrillic_pronunciations.py
 ```

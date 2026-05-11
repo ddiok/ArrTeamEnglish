@@ -27,16 +27,21 @@ FIELDS = [
     "word",
     "many",
     "pron_uk",
+    "pron_uk_ru",
     "pron_us",
+    "pron_us_ru",
     "stress",
     "pron_uk_many",
+    "pron_uk_many_ru",
     "pron_us_many",
+    "pron_us_many_ru",
     "stress_many",
     "ru",
     "ru_other",
     "used_phrase",
     "link",
 ]
+GENERATED_FIELDS = [field for field in FIELDS if field != "link"]
 
 WORD_RE = re.compile(r"^[A-Za-z][A-Za-z'-]*$")
 
@@ -217,10 +222,14 @@ def create_entry(word: str, key: str) -> Entry:
             "word": word,
             "many": many,
             "pron_uk": "TODO",
+            "pron_uk_ru": "TODO",
             "pron_us": "TODO",
+            "pron_us_ru": "TODO",
             "stress": stress_placeholder(word),
             "pron_uk_many": "TODO",
+            "pron_uk_many_ru": "TODO",
             "pron_us_many": "TODO",
+            "pron_us_many_ru": "TODO",
             "stress_many": stress_placeholder(many),
             "ru": "TODO",
             "ru_other": "TODO",
@@ -234,12 +243,15 @@ def openai_json_request(api_key: str, model: str, word: str) -> dict[str, str]:
     schema = {
         "type": "object",
         "additionalProperties": False,
-        "required": FIELDS,
-        "properties": {field: {"type": "string"} for field in FIELDS},
+        "required": GENERATED_FIELDS,
+        "properties": {field: {"type": "string"} for field in GENERATED_FIELDS},
     }
     prompt = (
         "Create a dictionary entry for one English noun. Return only schema fields. "
         "Use IPA slashes for pron_uk, pron_us, pron_uk_many, pron_us_many. "
+        "For pron_uk_ru, pron_us_ru, pron_uk_many_ru, pron_us_many_ru, write an approximate pronunciation "
+        "in Russian Cyrillic letters, wrapped in slashes, with stressed syllables uppercase. "
+        "Example: /тааск/, /Эск/, /МЕН-ю/. "
         "Use classic British pronunciation for pron_uk and common American pronunciation for pron_us. "
         "Use stress in a simple learner format like MEN-u, with stressed syllables uppercase. "
         "For ru, give one most common Russian translation, one word if possible. "
@@ -300,7 +312,9 @@ def openai_json_request(api_key: str, model: str, word: str) -> dict[str, str]:
         raise RuntimeError("OpenAI API returned no text output.")
 
     values = json.loads(text)
-    return {field: str(values.get(field, "")).strip() for field in FIELDS}
+    result = {field: str(values.get(field, "")).strip() for field in GENERATED_FIELDS}
+    result["link"] = ""
+    return result
 
 
 def safe_audio_file_name(word: str) -> str:
